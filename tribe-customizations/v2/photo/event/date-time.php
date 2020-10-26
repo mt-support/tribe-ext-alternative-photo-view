@@ -27,12 +27,21 @@ $display_end_date = false;
 ?>
 <div class="tribe-events-pro-photo__event-datetime tribe-common-b2">
 	<?php //$this->template( 'photo/event/date-time/featured' ); ?>
-	<?php if ( $event->all_day ) : ?>
+	<?php if ( $event->multiday ) : ?>
+	<?php //echo $event->schedule_details->value();
+	$one = date_create( $event->dates->start_display->format('Y-m-d') );
+	$two =  date_create( $event->dates->end_display->format('Y-m-d') )->modify('+1 day');
+	$nt = date_diff( $one, $two, true );
+
+	if ( ! $event->all_day ) {
+		echo esc_html( $event->dates->start_display->format( $time_format ) ) . ' | ';
+	}
+	echo $nt->format("%a" ) . '-day event';?>
+	<?php elseif ( $event->all_day ) : ?>
 		<time datetime="<?php echo esc_attr( $event->dates->start_display->format( 'Y-m-d' ) ) ?>">
 			<?php esc_attr_e( 'All day', 'tribe-events-calendar-pro' ); ?>
 		</time>
-	<?php elseif ( $event->multiday ) : ?>
-		<?php echo $event->schedule_details->value(); ?>
+
 	<?php else : ?>
 		<time datetime="<?php echo esc_attr( $event->dates->start_display->format( 'H:i' ) ) ?>">
 			<?php echo esc_html( $event->dates->start_display->format( $time_format ) ) ?>
