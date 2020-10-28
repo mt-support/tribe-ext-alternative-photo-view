@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       The Events Calendar Pro Extension: Alternative Photo View
- * Plugin URI:        https://theeventscalendar.com/extensions/tribe-ext-alternative-photo-view/
+ * Plugin URI:        https://theeventscalendar.com/extensions/alternative-photo-view/
  * GitHub Plugin URI: https://github.com/mt-support/tribe-ext-alternative-photo-view/
  * Description:       The extension will override the existing photo view of Events Calendar Pro with an alternative one.
  * Version:           1.0.0
