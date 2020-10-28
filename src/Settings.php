@@ -197,87 +197,48 @@ if ( ! class_exists( Settings::class ) ) {
 			$fields = [
 				'Example'   => [
 					'type' => 'html',
-					'html' => $this->get_example_intro_text(),
-				],
-				'full_width' => [
-					'type'            => 'checkbox_bool',
-					'label'           => esc_html__( 'Full width strip', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => sprintf( esc_html__( 'By default and if it fits, the strip appears next to the datepicker on the right. If set to full width, then the daystrip will appear below the datepicker.', 'tribe-ext-alternative-photo-view' ) ),
-					'validation_type' => 'boolean',
-				],
-				'number_of_days' => [
-					'type'            => 'text',
-					'label'           => esc_html__( 'Number of days to show', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => sprintf( esc_html__( 'The number of days to be shown on the daystrip. Best is if it is an odd number, and bigger than 2.', 'tribe-ext-alternative-photo-view' ) ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view') . ' 9</em>',
-					'validation_type' => 'positive_int',
-					'size'            => 'small',
-					'default'         => 9,
-				],
-				'behavior' => [
-					'type'            => 'dropdown',
-					'label'           => esc_html__( 'Behavior', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => esc_html__( 'Choose how you would like the day strip to behave.', 'tribe-ext-alternative-photo-view' ),
-					'validation_type' => 'options',
-					'size'            => 'small',
-					'default'         => 'default',
-					'options'         => $this->behavior_options(),
-				],
-				'start_date' => [
-					'type'            => 'text',
-					'label'           => esc_html__( 'Start date', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => sprintf( esc_html__( "Use YYYY-MM-DD format. Works only with the option '%sShow fixed number of days starting on a specific date%s'.", 'tribe-ext-alternative-photo-view' ), '<em>', '</em>' ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view') . ' 2</em>',
-					'validation_type' => 'alpha_numeric_with_dashes_and_underscores',
-					'size'            => 'medium',
-				],
-				'length_of_day_name' => [
-					'type'            => 'text',
-					'label'           => esc_html__( 'Length of the day name', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => sprintf( esc_html__( 'Defines how long the day name should be, e.g. if set to %s then day names will be like Mo, Tu, etc. A value of %s or empty value will hide the day names. A value of %s will show the full day name.', 'tribe-ext-alternative-photo-view' ), '<code>2</code>', '<code>0</code>', '<code>-1</code>' ),
-					'validation_type' => 'int',
-					'size'            => 'small',
-					'default'         => 2,
+					'html' => $this->get_settings_header_text(),
 				],
 				'just_a_label' => [
 					'type'            => 'html',
 					'html' => '<p>'
-					          . sprintf(
-						          esc_html__( 'The following two fields accept the date format options available to the PHP %s function.', 'tribe-ext-alternative-photo-view' ),
-						          '<a href="https://wordpress.org/support/article/formatting-date-and-time/" target="_blank"><code>date()</code></a>'
-					          )
-					          . '</p>',
+						. sprintf(
+							esc_html__( 'The following fields accept valid CSS values. If an invalid value is entered, then the page might break.', 'tribe-ext-alternative-photo-view' )
+						)
+						. '</p>',
 				],
-				'date_format' => [
+				'container_height' => [
 					'type'            => 'text',
-					'label'           => esc_html__( 'Date format', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => sprintf( esc_html__( 'Examples: %1$s - 1, %2$s - 01, %3$s - 1st, %4$s - hide', 'tribe-ext-alternative-photo-view' ),
-					                              '<code>j</code>',
-					                              '<code>d</code>',
-					                              '<code>jS</code>',
-					                              '<code>0</code>',
-					),
-					'validation_type' => 'alpha_numeric',
-					'size'            => 'small',
-					'default'         => 'j',
+					'label'           => esc_html__( 'Height of event container', 'tribe-ext-alternative-photo-view' ),
+					'tooltip'         => sprintf( esc_html__( 'Accepts any valid number and unit. Recommended size is between 100px (landscape) and 400px (portrait).', 'tribe-ext-alternative-photo-view' ) ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view') . ' 400px</em>',
+					'validation_type' => 'alpha_numeric_with_dashes_and_underscores',
+					'size'            => 'medium',
+					'default'         => '400px',
 				],
-				'month_format' => [
+				'number_of_columns' => [
+					'type'            => 'dropdown',
+					'label'           => esc_html__( 'Number of columns', 'tribe-ext-alternative-photo-view' ),
+					'tooltip'         => esc_html__( 'The number of columns the events should be organized into.', 'tribe-ext-alternative-photo-view' ),
+					'validation_type' => 'options',
+					'size'            => 'small',
+					'default'         => '2',
+					'options'         => $this->number_of_columns_options(),
+				],
+				'event_title_font_size' => [
 					'type'            => 'text',
-					'label'           => esc_html__( 'Month format', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => sprintf( esc_html__( 'Examples: %1$s - Jan., %2$s - January, %3$s - 01, %4$s - 1, %5$s - hide', 'tribe-ext-alternative-photo-view' ),
-					                              '<code>M</code>',
-					                              '<code>F</code>',
-					                              '<code>m</code>',
-					                              '<code>n</code>',
-					                              '<code>0</code>',
-					),
-					'validation_type' => 'alpha_numeric',
+					'label'           => esc_html__( 'Event title size', 'tribe-ext-alternative-photo-view' ),
+					'tooltip'         => esc_html__( "The font size of the event title. Accepts any valid measurement.", 'tribe-ext-alternative-photo-view' ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view') . ' 24px</em>',
+					'validation_type' => 'alpha_numeric_with_dashes_and_underscores',
 					'size'            => 'small',
-					'default'         => 'M',
+					'default'         => '24px',
 				],
-				'hide_event_marker' => [
-					'type'            => 'checkbox_bool',
-					'label'           => esc_html__( 'Hide event marker', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => sprintf( esc_html__( 'Enabling this option will hide the blue dot event marker from the daystrip.', 'tribe-ext-alternative-photo-view' ) ),
-					'validation_type' => 'boolean',
+				'container_border_radius' => [
+					'type'            => 'text',
+					'label'           => esc_html__( 'Border radius', 'tribe-ext-alternative-photo-view' ),
+					'tooltip'         => sprintf( esc_html__( 'The %1$sborder radius%2$s of the event container. This property can have from one to four values.', 'tribe-ext-alternative-photo-view' ), '<a href="https://www.w3schools.com/cssref/css3_pr_border-radius.asp" target="_blank">', '</a>' ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view') . ' 16px</em>',
+					'validation_type' => 'address',
+					'size'            => 'medium',
+					'default'         => '16px',
 				],
 			];
 
@@ -289,14 +250,12 @@ if ( ! class_exists( Settings::class ) ) {
 			);
 		}
 
-		private function behavior_options() {
+		private function number_of_columns_options() {
 			return [
-				'default'          => esc_html__( 'Selected day always in the middle of the strip', 'tribe-ext-alternative-photo-view' ),
-				'forward'          => esc_html__( 'Only show days forward from the selected day', 'tribe-ext-alternative-photo-view' ),
-				'fixed_from_today' => esc_html__( 'Show fixed number of days starting today', 'tribe-ext-alternative-photo-view' ),
-				'fixed_from_date'  => esc_html__( 'Show fixed number of days starting on a specific date', 'tribe-ext-alternative-photo-view' ),
-				'current_week'     => esc_html__( 'Current week (forces 7 days)', 'tribe-ext-alternative-photo-view' ),
-				//'next_week'        => esc_html__( 'Next week (forces 7 days)', 'tribe-ext-alternative-photo-view' ), // @TODO This needs to be fixed
+				'2' => '2',
+				'3' => '3',
+				'4' => '4',
+				'5' => '5',
 			];
 	}
 		/**
@@ -324,8 +283,8 @@ if ( ! class_exists( Settings::class ) ) {
 		 *
 		 * @return string
 		 */
-		private function get_example_intro_text() {
-			return '<h3>' . esc_html_x( 'Day Strip Extension Settings', 'Settings header', 'tribe-ext-alternative-photo-view' ) . '</h3>';
+		private function get_settings_header_text() {
+			return '<h3>' . esc_html_x( 'Alternative Photo View Settings', 'Settings header', 'tribe-ext-alternative-photo-view' ) . '</h3>';
 		}
 
 	} // class
