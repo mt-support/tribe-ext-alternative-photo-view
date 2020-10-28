@@ -33,5 +33,5 @@ if ( empty( $event->featured ) ) {
 	</em>
 	<span class="tribe-events-pro-photo__event-datetime-featured-text">
 	<?php esc_html_e( 'Featured', 'tribe-events-calendar-pro' ); ?>
-</span>
+	</span>
 </div>
