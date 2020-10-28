@@ -25,7 +25,6 @@
 
 namespace Tribe\Extensions\AlternativePhotoView;
 
-use Tribe__Dependency;
 use Tribe__Extension;
 
 /**
@@ -34,11 +33,6 @@ use Tribe__Extension;
 
 if ( ! defined( __NAMESPACE__ . '\NS' ) ) {
 	define( __NAMESPACE__ . '\NS', __NAMESPACE__ . '\\' );
-}
-
-if ( ! defined( NS . 'PLUGIN_TEXT_DOMAIN' ) ) {
-	// `Tribe\Extensions\AlternativePhotoView\PLUGIN_TEXT_DOMAIN` is defined
-	define( NS . 'PLUGIN_TEXT_DOMAIN', 'tribe-ext-alternative-photo-view' );
 }
 
 // Do not load unless Tribe Common is fully loaded and our class does not yet exist.
@@ -79,7 +73,7 @@ if (
 		 */
 		public function init() {
 			// Load plugin textdomain
-			load_plugin_textdomain( PLUGIN_TEXT_DOMAIN, false, basename( dirname( __FILE__ ) ) . '/languages/' );
+			load_plugin_textdomain( 'tribe-ext-alternative-photo-view', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 
 			if ( ! $this->php_version_check() ) {
 				return;
@@ -103,14 +97,14 @@ if (
 					$message .= sprintf(
 						__(
 							'%s requires PHP version %s or newer to work. Please contact your website host and inquire about updating PHP.',
-							PLUGIN_TEXT_DOMAIN
+							'tribe-ext-alternative-photo-view'
 						),
 						$this->get_name(),
 						$php_required_version
 					);
 					$message .= sprintf( ' <a href="%1$s">%1$s</a>', 'https://wordpress.org/about/requirements/' );
 					$message .= '</p>';
-					tribe_notice( PLUGIN_TEXT_DOMAIN . '-php-version', $message, [ 'type' => 'error' ] );
+					tribe_notice( 'tribe-ext-alternative-photo-view' . '-php-version', $message, [ 'type' => 'error' ] );
 				}
 
 				return false;
@@ -160,5 +154,3 @@ if (
 		}
 	}
 }
-
-
