@@ -71,39 +71,7 @@ if (
 		 * This always executes even if the required plugins are not present.
 		 */
 		public function construct() {
-			//$this->add_required_plugin( 'Tribe__Events__Main' );
 			$this->add_required_plugin( 'Tribe__Events__Pro__Main', '5.0.1' );
-
-			// Conditionally-require Events Calendar PRO or Event Tickets. If it is active, run an extra bit of code.
-			//add_action( 'tribe_plugins_loaded', [ $this, 'detect_tribe_plugins' ], 0 );
-		}
-
-		/**
-		 * Check required plugins after all Tribe plugins have loaded.
-		 *
-		 * Useful for conditionally-requiring a Tribe plugin, whether to add extra functionality
-		 * or require a certain version but only if it is active.
-		 */
-		public function detect_tribe_plugins() {
-			/** @var Tribe__Dependency $dep */
-			$dep = tribe( Tribe__Dependency::class );
-
-			if ( $dep->is_plugin_active( 'Tribe__Events__Pro__Main' ) ) {
-				$this->add_required_plugin( 'Tribe__Events__Pro__Main' );
-				$this->ecp_active = true;
-			}
-			if ( $dep->is_plugin_active( 'Tribe__Tickets__Main' ) ) {
-				$this->add_required_plugin( 'Tribe__Tickets__Main' );
-				$this->et_active = true;
-			}
-			if ( $dep->is_plugin_active( 'Tribe__Events__Filterbar__View' ) ) {
-				$this->add_required_plugin( 'Tribe__Events__Filterbar__View' );
-				$this->fb_active = true;
-			}
-			if ( $dep->is_plugin_active( 'Tribe__Events__Community__Main' ) ) {
-				$this->add_required_plugin( 'Tribe__Events__Community__Main' );
-				$this->ce_active = true;
-			}
 		}
 
 		/**
@@ -111,7 +79,6 @@ if (
 		 */
 		public function init() {
 			// Load plugin textdomain
-			// Don't forget to generate the 'languages/tribe-ext-admin-bar-plus.pot' file
 			load_plugin_textdomain( PLUGIN_TEXT_DOMAIN, false, basename( dirname( __FILE__ ) ) . '/languages/' );
 
 			if ( ! $this->php_version_check() ) {
@@ -154,13 +121,13 @@ if (
 
 		function alternative_photo_view_1_template_locations( $folders, \Tribe__Template $template ) {
 			// Which file namespace your plugin will use.
-			$plugin_name = 'my-plugin';
+			$plugin_name = 'tribe-ext-alternative-photo-view';
 
-			// Which order we should load your plugin files at.
+			/**
+			 * Which order we should load your plugin files at. Plugin in which the file was loaded from = 20.
+			 * Events Pro = 25. Tickets = 17
+			 */
 			$priority = 5;
-			// Plugin in which the file was loaded from = 20
-			// Events Pro = 25
-			// Tickets = 17
 
 			// Which folder in your plugin the customizations will be loaded from.
 			$custom_folder[] = 'tribe-customizations';
