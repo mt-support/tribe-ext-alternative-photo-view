@@ -3,7 +3,7 @@
  * Plugin Name:       The Events Calendar Pro Extension: Alternative Photo View
  * Plugin URI:        https://theeventscalendar.com/extensions/tribe-ext-alternative-photo-view/
  * GitHub Plugin URI: https://github.com/mt-support/tribe-ext-alternative-photo-view/
- * Description:       The extension will replace the existing photo view of Events Calendar Pro with an alternative one.
+ * Description:       The extension will override the existing photo view of Events Calendar Pro with an alternative one.
  * Version:           1.0.0
  * Extension Class:   Tribe\Extensions\AlternativePhotoView\Main
  * Author:            Modern Tribe, Inc.
@@ -22,6 +22,7 @@
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *     GNU General Public License for more details.
  */
+
 namespace Tribe\Extensions\AlternativePhotoView;
 
 use Tribe__Dependency;
@@ -132,10 +133,14 @@ if (
 			if ( version_compare( PHP_VERSION, $php_required_version, '<' ) ) {
 				if ( is_admin() && current_user_can( 'activate_plugins' ) ) {
 					$message = '<p>';
-					$message .= sprintf( __( '%s requires PHP version %s or newer to work. Please contact your website host and inquire about updating PHP.',
-					                         PLUGIN_TEXT_DOMAIN ),
-					                     $this->get_name(),
-					                     $php_required_version );
+					$message .= sprintf(
+						__(
+							'%s requires PHP version %s or newer to work. Please contact your website host and inquire about updating PHP.',
+							PLUGIN_TEXT_DOMAIN
+						),
+						$this->get_name(),
+						$php_required_version
+					);
 					$message .= sprintf( ' <a href="%1$s">%1$s</a>', 'https://wordpress.org/about/requirements/' );
 					$message .= '</p>';
 					tribe_notice( PLUGIN_TEXT_DOMAIN . '-php-version', $message, [ 'type' => 'error' ] );
@@ -161,9 +166,11 @@ if (
 			$custom_folder[] = 'tribe-customizations';
 
 			// Builds the correct file path to look for.
-			$plugin_path = array_merge( (array) trailingslashit( plugin_dir_path( __FILE__ ) ),
-			                            (array) $custom_folder,
-			                            array_diff( $template->get_template_folder(), [ 'src', 'views' ] ) );
+			$plugin_path = array_merge(
+				(array) trailingslashit( plugin_dir_path( __FILE__ ) ),
+				(array) $custom_folder,
+				array_diff( $template->get_template_folder(), [ 'src', 'views' ] )
+			);
 
 			/*
 			 * Custom loading location for overwriting file loading.
@@ -182,7 +189,7 @@ if (
 		 * Add stylesheet to the page
 		 */
 		function safely_add_stylesheet() {
-			wp_enqueue_style( 'prefix-style', plugins_url('style.css', __FILE__) );
+			wp_enqueue_style( 'prefix-style', plugins_url( 'style.css', __FILE__ ) );
 		}
 	}
 }
