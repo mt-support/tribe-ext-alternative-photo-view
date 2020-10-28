@@ -85,11 +85,11 @@ if (
 		 * Settings_Helper will append a trailing underscore before each option.
 		 *
 		 * @return string
-		 * @see \Tribe\Extensions\Daystrip\Settings::set_options_prefix()
+		 * @see \Tribe\Extensions\AlternativePhotoView\Settings::set_options_prefix()
 		 *
 		 */
 		private function get_options_prefix() {
-			return (string) str_replace( '-', '_', 'tribe-ext-daystrip' );
+			return (string) str_replace( '-', '_', 'tribe-ext-alternative-photo-view' );
 		}
 
 		/**

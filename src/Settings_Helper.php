@@ -1,6 +1,6 @@
 <?php
 
-namespace Tribe\Extensions\Daystrip;
+namespace Tribe\Extensions\AlternativePhotoView;
 
 use Tribe__Main;
 
