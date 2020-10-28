@@ -2,8 +2,11 @@
 /**
  * View: Photo View
  *
- * Override this template in your own theme by creating a file at:
- * [your-theme]/tribe/events-pro/v2/photo.php
+ * This is a template override of the file at:
+ * events-calendar-pro/src/views/v2/photo.php
+ *
+ * Added CSS class for the container.
+ * Added variable for the event categories. (Not yet used.)
  *
  * See more documentation about our views templating system.
  *
@@ -29,7 +32,7 @@ $header_classes = [ 'tribe-events-header' ];
 if ( empty( $disable_event_search ) ) {
 	$header_classes[] = 'tribe-events-header--has-event-search';
 }
-$container_classes[] = 'alternative-photo-view-1';
+$container_classes[] = 'alternative-photo-view';
 
 $event_categories = get_terms( [
 	                    'taxonomy'   => 'tribe_events_cat',
