@@ -1,7 +1,6 @@
 .tribe-events-pro-photo__event {
     height: 400px;
 }
-
 .tribe-events-pro-photo__event-details-wrapper {
     background-repeat: no-repeat;
     background-size: cover;
@@ -76,7 +75,7 @@
 .tribe-events-pro-photo__event-details-wrapper .row-title {
     width: 100%;
 }
-/* To make time go to the right */
+/* To make the time go to the right */
 .row-date-time {
     flex-grow: 1;
 }
