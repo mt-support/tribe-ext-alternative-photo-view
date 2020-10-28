@@ -25,6 +25,7 @@
 
 namespace Tribe\Extensions\AlternativePhotoView;
 
+use Tribe__Autoloader;
 use Tribe__Extension;
 
 /**
@@ -44,6 +45,16 @@ if (
 	 * Extension main class, class begins loading on init() function.
 	 */
 	class Main extends Tribe__Extension {
+
+		/**
+		 * @var Tribe__Autoloader
+		 */
+		private $class_loader;
+
+		/**
+		 * @var Settings
+		 */
+		private $settings;
 
 		/**
 		 * Is Events Calendar PRO active. If yes, we will add some extra functionality.
@@ -69,6 +80,32 @@ if (
 		}
 
 		/**
+		 * Get this plugin's options prefix.
+		 *
+		 * Settings_Helper will append a trailing underscore before each option.
+		 *
+		 * @return string
+		 * @see \Tribe\Extensions\Daystrip\Settings::set_options_prefix()
+		 *
+		 */
+		private function get_options_prefix() {
+			return (string) str_replace( '-', '_', 'tribe-ext-daystrip' );
+		}
+
+		/**
+		 * Get Settings instance.
+		 *
+		 * @return Settings
+		 */
+		private function get_settings() {
+			if ( empty( $this->settings ) ) {
+				$this->settings = new Settings( $this->get_options_prefix() );
+			}
+
+			return $this->settings;
+		}
+
+		/**
 		 * Extension initialization and hooks.
 		 */
 		public function init() {
@@ -78,6 +115,10 @@ if (
 			if ( ! $this->php_version_check() ) {
 				return;
 			}
+
+			$this->class_loader();
+
+			$this->get_settings();
 
 			add_action( 'wp_enqueue_scripts', [ $this, 'safely_add_stylesheet' ] );
 			add_filter( 'tribe_template_path_list', [ $this, 'alternative_photo_view_1_template_locations' ], 10, 2 );
@@ -152,5 +193,49 @@ if (
 		function safely_add_stylesheet() {
 			wp_enqueue_style( 'prefix-style', plugins_url( 'src/resources/style.css', __FILE__ ) );
 		}
+
+		/**
+		 * Use Tribe Autoloader for all class files within this namespace in the 'src' directory.
+		 *
+		 * @return Tribe__Autoloader
+		 */
+		public function class_loader() {
+			if ( empty( $this->class_loader ) ) {
+				$this->class_loader = new Tribe__Autoloader;
+				$this->class_loader->set_dir_separator( '\\' );
+				$this->class_loader->register_prefix( __NAMESPACE__ . '\\',
+					__DIR__ . DIRECTORY_SEPARATOR . 'src' );
+			}
+
+			$this->class_loader->register_autoloader();
+
+			return $this->class_loader;
+		}
+
+		/**
+		 * Get all of this extension's options.
+		 *
+		 * @return array
+		 */
+		public function get_all_options() {
+			$settings = $this->get_settings();
+
+			return $settings->get_all_options();
+		}
+
+		/**
+		 * Get a specific extension option.
+		 *
+		 * @param $option
+		 * @param string $default
+		 *
+		 * @return array
+		 */
+		public function get_option( $option, $default ='' ) {
+			$settings = $this->get_settings();
+
+			return $settings->get_option( $option, $default );
+		}
+
 	}
 }
