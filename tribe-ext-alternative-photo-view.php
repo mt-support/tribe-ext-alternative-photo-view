@@ -150,7 +150,7 @@ if (
 		 * Add stylesheet to the page
 		 */
 		function safely_add_stylesheet() {
-			wp_enqueue_style( 'prefix-style', plugins_url( 'style.css', __FILE__ ) );
+			wp_enqueue_style( 'prefix-style', plugins_url( 'src/resources/style.css', __FILE__ ) );
 		}
 	}
 }
