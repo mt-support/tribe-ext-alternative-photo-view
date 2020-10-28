@@ -31,6 +31,6 @@ We're always interested in your feedback and our [Help Desk](https://support.the
 
 == Changelog ==
 
-= [1.0.0] TBD =
+= [1.0.0] 2020-10-28 =
 
 * Initial release
