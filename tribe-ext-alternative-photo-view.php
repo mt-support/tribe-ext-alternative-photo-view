@@ -4,7 +4,7 @@
  * Plugin URI:        https://theeventscalendar.com/extensions/alternative-photo-view/
  * GitHub Plugin URI: https://github.com/mt-support/tribe-ext-alternative-photo-view/
  * Description:       The extension will override the existing photo view of Events Calendar Pro with an alternative one.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Extension Class:   Tribe\Extensions\AlternativePhotoView\Main
  * Author:            Modern Tribe, Inc.
  * Author URI:        http://m.tri.be/1971
@@ -25,6 +25,7 @@
 
 namespace Tribe\Extensions\AlternativePhotoView;
 
+use Tribe__Autoloader;
 use Tribe__Extension;
 
 /**
@@ -44,6 +45,16 @@ if (
 	 * Extension main class, class begins loading on init() function.
 	 */
 	class Main extends Tribe__Extension {
+
+		/**
+		 * @var Tribe__Autoloader
+		 */
+		private $class_loader;
+
+		/**
+		 * @var Settings
+		 */
+		private $settings;
 
 		/**
 		 * Is Events Calendar PRO active. If yes, we will add some extra functionality.
@@ -69,6 +80,32 @@ if (
 		}
 
 		/**
+		 * Get this plugin's options prefix.
+		 *
+		 * Settings_Helper will append a trailing underscore before each option.
+		 *
+		 * @see \Tribe\Extensions\AlternativePhotoView\Settings::set_options_prefix()
+		 *
+		 * @return string
+		 */
+		private function get_options_prefix() {
+			return (string) str_replace( '-', '_', 'tribe-ext-alternative-photo-view' );
+		}
+
+		/**
+		 * Get Settings instance.
+		 *
+		 * @return Settings
+		 */
+		private function get_settings() {
+			if ( empty( $this->settings ) ) {
+				$this->settings = new Settings( $this->get_options_prefix() );
+			}
+
+			return $this->settings;
+		}
+
+		/**
 		 * Extension initialization and hooks.
 		 */
 		public function init() {
@@ -79,8 +116,78 @@ if (
 				return;
 			}
 
+			$this->class_loader();
+
+			$this->get_settings();
+
 			add_action( 'wp_enqueue_scripts', [ $this, 'safely_add_stylesheet' ] );
-			add_filter( 'tribe_template_path_list', [ $this, 'alternative_photo_view_1_template_locations' ], 10, 2 );
+			add_filter( 'tribe_template_path_list', [ $this, 'alternative_photo_view_template_locations' ], 10, 2 );
+
+			add_action( 'wp_footer', [ $this, 'footer_styles' ] );
+		}
+
+		/**
+		 * Add dynamically calculated styles to the footer.
+		 */
+		public function footer_styles() {
+
+			$container_height = $this->get_option( 'container_height', '400px' );
+
+			$column_width_tablet  = round( 100 / (int) $this->get_option( 'number_of_columns_tablet', 3 ), 1 );
+			$column_width_desktop = round( 100 / (int) $this->get_option( 'number_of_columns_desktop', 3 ), 1 );
+
+			$event_title_font_size   = $this->get_option( 'event_title_font_size', '24px' );
+			$event_title_alignment   = $this->get_option( 'event_title_alignment', 'left' );
+			$container_border_radius = $this->get_option( 'container_border_radius', '16px' );
+
+			?>
+			<style id="tribe-ext-alternative-photo-view-styles">
+				.tribe-events-pro-photo__event {
+					height: <?php echo $container_height ?>;
+				}
+
+				.tribe-common--breakpoint-medium.tribe-events-pro .tribe-events-pro-photo__event {
+					width: <?php echo $column_width_tablet ?>%;
+				}
+
+				.tribe-common--breakpoint-full.tribe-events-pro .tribe-events-pro-photo__event {
+					width: <?php echo $column_width_desktop ?>%;
+				}
+
+				.tribe-events-pro-photo__event-title a {
+					font-size: <?php echo $event_title_font_size ?>;
+				}
+
+				.tribe-events-pro-photo__event .tribe-events-pro-photo__event-title {
+					text-align: <?php echo $event_title_alignment ?>;
+				}
+
+				.tribe-events-pro-photo__event-details-wrapper {
+					border-radius: <?php echo $container_border_radius ?>;
+				}
+
+				.tribe-events-pro .tribe-events-pro-photo__event-date-tag {
+					border-top-left-radius: <?php echo $container_border_radius ?>;
+				}
+
+				<?php
+				if (
+					(int) $this->get_option( 'number_of_columns_tablet' ) > 3
+					||  (int) $this->get_option( 'number_of_columns_desktop' ) > 3
+					) :
+				?>
+				.tribe-common--breakpoint-medium.tribe-common .tribe-common-g-row--gutters {
+					margin-left: -12px;
+					margin-right: -12px;
+				}
+
+				.tribe-common--breakpoint-medium.tribe-common .tribe-common-g-row--gutters > .tribe-common-g-col {
+					padding-left: 12px;
+					padding-right: 12px;
+				}
+				<?php endif; ?>
+			</style>
+			<?php
 		}
 
 		/**
@@ -113,7 +220,15 @@ if (
 			return true;
 		}
 
-		function alternative_photo_view_1_template_locations( $folders, \Tribe__Template $template ) {
+		/**
+		 * Set up the template override folder for the extension.
+		 *
+		 * @param                  $folders
+		 * @param \Tribe__Template $template
+		 *
+		 * @return mixed
+		 */
+		function alternative_photo_view_template_locations( $folders, \Tribe__Template $template ) {
 			// Which file namespace your plugin will use.
 			$plugin_name = 'tribe-ext-alternative-photo-view';
 
@@ -147,10 +262,56 @@ if (
 		}
 
 		/**
-		 * Add stylesheet to the page
+		 * Add stylesheet to the page.
 		 */
 		function safely_add_stylesheet() {
-			wp_enqueue_style( 'prefix-style', plugins_url( 'style.css', __FILE__ ) );
+			wp_enqueue_style( 'prefix-style', plugins_url( 'src/resources/style.css', __FILE__ ) );
 		}
+
+		/**
+		 * Use Tribe Autoloader for all class files within this namespace in the 'src' directory.
+		 *
+		 * @return Tribe__Autoloader
+		 */
+		public function class_loader() {
+			if ( empty( $this->class_loader ) ) {
+				$this->class_loader = new Tribe__Autoloader;
+				$this->class_loader->set_dir_separator( '\\' );
+				$this->class_loader->register_prefix(
+					__NAMESPACE__ . '\\',
+					__DIR__ . DIRECTORY_SEPARATOR . 'src'
+				);
+			}
+
+			$this->class_loader->register_autoloader();
+
+			return $this->class_loader;
+		}
+
+		/**
+		 * Get all of this extension's options.
+		 *
+		 * @return array
+		 */
+		public function get_all_options() {
+			$settings = $this->get_settings();
+
+			return $settings->get_all_options();
+		}
+
+		/**
+		 * Get a specific extension option.
+		 *
+		 * @param        $option
+		 * @param string $default
+		 *
+		 * @return array
+		 */
+		public function get_option( $option, $default = '' ) {
+			$settings = $this->get_settings();
+
+			return $settings->get_option( $option, $default );
+		}
+
 	}
 }
