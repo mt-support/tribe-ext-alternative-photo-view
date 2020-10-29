@@ -31,7 +31,7 @@ if ( ! class_exists( Settings::class ) ) {
 		 *
 		 * @param string $options_prefix Recommended: the plugin text domain, with hyphens converted to underscores.
 		 */
-		public function __construct( $options_prefix ) {
+		public function __construct( string $options_prefix ) {
 			$this->settings_helper = new Settings_Helper();
 
 			$this->set_options_prefix( $options_prefix );
@@ -74,7 +74,7 @@ if ( ! class_exists( Settings::class ) ) {
 		 *
 		 * @param string $options_prefix
 		 */
-		private function set_options_prefix( $options_prefix ) {
+		private function set_options_prefix( string $options_prefix ) {
 			$options_prefix = $options_prefix . '_';
 
 			$this->options_prefix = str_replace( '__', '_', $options_prefix );
@@ -96,13 +96,13 @@ if ( ! class_exists( Settings::class ) ) {
 		 *
 		 * This automatically prepends this extension's option prefix so you can just do `$this->get_option( 'a_setting' )`.
 		 *
-		 * @param string $key
+		 * @see tribe_get_option()
 		 *
 		 * @param string $default
 		 *
-		 * @return mixed
-		 * @see tribe_get_option()
+		 * @param string $key
 		 *
+		 * @return mixed
 		 */
 		public function get_option( $key = '', $default = '' ) {
 			$key = $this->sanitize_option_key( $key );
@@ -195,47 +195,65 @@ if ( ! class_exists( Settings::class ) ) {
 		 */
 		public function add_settings() {
 			$fields = [
-				'Example'   => [
+				'Example'                   => [
 					'type' => 'html',
 					'html' => $this->get_settings_header_text(),
 				],
-				'just_a_label' => [
-					'type'            => 'html',
+				'just_a_label'              => [
+					'type' => 'html',
 					'html' => '<p>'
 						. sprintf(
 							esc_html__( 'The following fields accept valid CSS values. If an invalid value is entered, then the page might break.', 'tribe-ext-alternative-photo-view' )
 						)
 						. '</p>',
 				],
-				'container_height' => [
+				'container_height'          => [
 					'type'            => 'text',
 					'label'           => esc_html__( 'Height of event container', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => sprintf( esc_html__( 'Accepts any valid number and unit. Recommended size is between 100px (landscape) and 400px (portrait).', 'tribe-ext-alternative-photo-view' ) ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view') . ' 400px</em>',
+					'tooltip'         => sprintf( esc_html__( 'Accepts any valid number and unit. Recommended size is between 100px (landscape) and 400px (portrait).', 'tribe-ext-alternative-photo-view' ) ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view' ) . ' 400px</em>',
 					'validation_type' => 'alpha_numeric_with_dashes_and_underscores',
 					'size'            => 'medium',
 					'default'         => '400px',
 				],
-				'number_of_columns' => [
+				'number_of_columns_desktop' => [
 					'type'            => 'dropdown',
-					'label'           => esc_html__( 'Number of columns', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => esc_html__( 'The number of columns the events should be organized into.', 'tribe-ext-alternative-photo-view' ),
+					'label'           => esc_html__( 'Number of columns on a large screen', 'tribe-ext-alternative-photo-view' ),
+					'tooltip'         => esc_html__( 'The number of columns the events should be organized into on a large screen (1098px wide or larger).', 'tribe-ext-alternative-photo-view' ),
 					'validation_type' => 'options',
 					'size'            => 'small',
-					'default'         => '2',
-					'options'         => $this->number_of_columns_options(),
+					'default'         => '3',
+					'options'         => $this->get_number_of_columns_options(),
 				],
-				'event_title_font_size' => [
+				'number_of_columns_tablet'  => [
+					'type'            => 'dropdown',
+					'label'           => esc_html__( 'Number of columns on a tablet', 'tribe-ext-alternative-photo-view' ),
+					'tooltip'         => esc_html__( 'The number of columns the events should be organized into on a tablet screen (between 810px and 1097px).', 'tribe-ext-alternative-photo-view' ),
+					'validation_type' => 'options',
+					'size'            => 'small',
+					'default'         => '3',
+					'options'         => $this->get_number_of_columns_options(),
+				],
+				'event_title_font_size'     => [
 					'type'            => 'text',
 					'label'           => esc_html__( 'Event title size', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => esc_html__( "The font size of the event title. Accepts any valid measurement.", 'tribe-ext-alternative-photo-view' ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view') . ' 24px</em>',
+					'tooltip'         => esc_html__( "The font size of the event title. Accepts any valid measurement.", 'tribe-ext-alternative-photo-view' ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view' ) . ' 24px</em>',
 					'validation_type' => 'alpha_numeric_with_dashes_and_underscores',
 					'size'            => 'small',
 					'default'         => '24px',
 				],
-				'container_border_radius' => [
+				'event_title_alignment'     => [
+					'type'            => 'dropdown',
+					'label'           => esc_html__( 'Event title alignment', 'tribe-ext-alternative-photo-view' ),
+					'tooltip'         => esc_html__( "How the event title should be aligned.", 'tribe-ext-alternative-photo-view' ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view' ) . ' left</em>',
+					'validation_type' => 'options',
+					'size'            => 'small',
+					'default'         => 'left',
+					'options'         => $this->get_event_title_alignment_options(),
+				],
+				'container_border_radius'   => [
 					'type'            => 'text',
 					'label'           => esc_html__( 'Border radius', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => sprintf( esc_html__( 'The %1$sborder radius%2$s of the event container. This property can have from one to four values.', 'tribe-ext-alternative-photo-view' ), '<a href="https://www.w3schools.com/cssref/css3_pr_border-radius.asp" target="_blank">', '</a>' ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view') . ' 16px</em>',
+					'tooltip'         => sprintf( esc_html__( 'The %1$sborder radius%2$s of the event container. This property can have from one to four values.', 'tribe-ext-alternative-photo-view' ), '<a href="https://www.w3schools.com/cssref/css3_pr_border-radius.asp" target="_blank">', '</a>' ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view' ) . ' 16px</em>',
 					'validation_type' => 'address',
 					'size'            => 'medium',
 					'default'         => '16px',
@@ -250,14 +268,25 @@ if ( ! class_exists( Settings::class ) ) {
 			);
 		}
 
-		private function number_of_columns_options() {
+		private function get_number_of_columns_options() {
 			return [
 				'2' => '2',
-				'3' => '3',
+				'3' => '3 (default)',
 				'4' => '4',
 				'5' => '5',
 			];
-	}
+		}
+
+		private function get_event_title_alignment_options() {
+			return [
+				'left'      => 'left (default)',
+				'center'    => 'center',
+				'right'     => 'right',
+				'justified' => 'justified',
+			];
+		}
+
+
 		/**
 		 * Add the options prefix to each of the array keys.
 		 *
