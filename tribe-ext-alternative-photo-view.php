@@ -169,6 +169,7 @@ if (
 				.tribe-events-pro .tribe-events-pro-photo__event-date-tag {
 					border-top-left-radius: <?php echo $container_border_radius ?>;
 				}
+
 				<?php
 				if (
 					(int) $this->get_option( 'number_of_columns_tablet' ) > 3
@@ -179,6 +180,7 @@ if (
 					margin-left: -12px;
 					margin-right: -12px;
 				}
+				
 				.tribe-common--breakpoint-medium.tribe-common .tribe-common-g-row--gutters > .tribe-common-g-col {
 					padding-left: 12px;
 					padding-right: 12px;
