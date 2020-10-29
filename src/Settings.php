@@ -210,7 +210,7 @@ if ( ! class_exists( Settings::class ) ) {
 				'container_height'          => [
 					'type'            => 'text',
 					'label'           => esc_html__( 'Height of event container', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => sprintf( esc_html__( 'Accepts any valid number and unit. Recommended size is between 100px (landscape) and 400px (portrait).', 'tribe-ext-alternative-photo-view' ) ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view' ) . ' 400px</em>',
+					'tooltip'         => $this->get_container_height_tooltip(),
 					'validation_type' => 'alpha_numeric_with_dashes_and_underscores',
 					'size'            => 'medium',
 					'default'         => '400px',
@@ -218,7 +218,7 @@ if ( ! class_exists( Settings::class ) ) {
 				'number_of_columns_desktop' => [
 					'type'            => 'dropdown',
 					'label'           => esc_html__( 'Number of columns on a large screen', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => esc_html__( 'The number of columns the events should be organized into on a large screen (1098px wide or larger).', 'tribe-ext-alternative-photo-view' ),
+					'tooltip'         => esc_html__( 'The number of columns the events are organized into on a screen that is at least 1098px wide.', 'tribe-ext-alternative-photo-view' ),
 					'validation_type' => 'options',
 					'size'            => 'small',
 					'default'         => '3',
@@ -227,7 +227,7 @@ if ( ! class_exists( Settings::class ) ) {
 				'number_of_columns_tablet'  => [
 					'type'            => 'dropdown',
 					'label'           => esc_html__( 'Number of columns on a tablet', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => esc_html__( 'The number of columns the events should be organized into on a tablet screen (between 810px and 1097px).', 'tribe-ext-alternative-photo-view' ),
+					'tooltip'         => esc_html__( 'The number of columns the events are organized into on a tablet screen with a width between 810px and 1097px.', 'tribe-ext-alternative-photo-view' ),
 					'validation_type' => 'options',
 					'size'            => 'small',
 					'default'         => '3',
@@ -236,7 +236,7 @@ if ( ! class_exists( Settings::class ) ) {
 				'event_title_font_size'     => [
 					'type'            => 'text',
 					'label'           => esc_html__( 'Event title size', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => esc_html__( "The font size of the event title. Accepts any valid measurement.", 'tribe-ext-alternative-photo-view' ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view' ) . ' 24px</em>',
+					'tooltip'         => $this->get_event_title_font_size_tooltip(),
 					'validation_type' => 'alpha_numeric_with_dashes_and_underscores',
 					'size'            => 'small',
 					'default'         => '24px',
@@ -244,7 +244,7 @@ if ( ! class_exists( Settings::class ) ) {
 				'event_title_alignment'     => [
 					'type'            => 'dropdown',
 					'label'           => esc_html__( 'Event title alignment', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => esc_html__( "How the event title should be aligned.", 'tribe-ext-alternative-photo-view' ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view' ) . ' left</em>',
+					'tooltip'         => $this->get_event_title_alignment_tooltip(),
 					'validation_type' => 'options',
 					'size'            => 'small',
 					'default'         => 'left',
@@ -253,7 +253,7 @@ if ( ! class_exists( Settings::class ) ) {
 				'container_border_radius'   => [
 					'type'            => 'text',
 					'label'           => esc_html__( 'Border radius', 'tribe-ext-alternative-photo-view' ),
-					'tooltip'         => sprintf( esc_html__( 'The %1$sborder radius%2$s of the event container. This property can have from one to four values.', 'tribe-ext-alternative-photo-view' ), '<a href="https://www.w3schools.com/cssref/css3_pr_border-radius.asp" target="_blank">', '</a>' ) . '<br/><em>' . esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view' ) . ' 16px</em>',
+					'tooltip'         => $this->get_container_border_radius_tooltip(),
 					'validation_type' => 'address',
 					'size'            => 'medium',
 					'default'         => '16px',
@@ -268,6 +268,11 @@ if ( ! class_exists( Settings::class ) ) {
 			);
 		}
 
+		/**
+		 * List of options for the number of columns.
+		 *
+		 * @return array
+		 */
 		private function get_number_of_columns_options() {
 			return [
 				'2' => '2',
@@ -277,6 +282,11 @@ if ( ! class_exists( Settings::class ) ) {
 			];
 		}
 
+		/**
+		 * List of options for text alignment.
+		 *
+		 * @return array
+		 */
 		private function get_event_title_alignment_options() {
 			return [
 				'left'      => 'left (default)',
@@ -308,12 +318,84 @@ if ( ! class_exists( Settings::class ) ) {
 		}
 
 		/**
-		 * Here is an example of getting some HTML for the Settings Header.
+		 * HTML for the Settings Header.
 		 *
 		 * @return string
 		 */
 		private function get_settings_header_text() {
 			return '<h3>' . esc_html_x( 'Alternative Photo View Settings', 'Settings header', 'tribe-ext-alternative-photo-view' ) . '</h3>';
+		}
+
+		/**
+		 * Tooltip text for the container height setting.
+		 *
+		 * @return string
+		 */
+		private function get_container_height_tooltip(): string {
+			$tooltip = esc_html__(
+				'Accepts any valid CSS measurement.',
+				'tribe-ext-alternative-photo-view'
+			);
+			$tooltip .= ' ';
+			$tooltip .= esc_html__(
+				'Recommended size is between 100px (landscape) and 400px (portrait).',
+				'tribe-ext-alternative-photo-view'
+			);
+			$tooltip .= '<br/><em>';
+			$tooltip .= esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view' );
+			$tooltip .= ' 400px';
+			$tooltip .= '</em>';
+
+			return $tooltip;
+		}
+
+		/**
+		 * Tooltip text for the event title font size setting.
+		 *
+		 * @return string
+		 */
+		private function get_event_title_font_size_tooltip(): string {
+			$tooltip = esc_html__( "The font size of the event title.", 'tribe-ext-alternative-photo-view' );
+			$tooltip .= ' ';
+			$tooltip .= esc_html__( "Accepts any valid CSS measurement.", 'tribe-ext-alternative-photo-view' );
+			$tooltip .= '<br/><em>';
+			$tooltip .= esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view' );
+			$tooltip .= ' 24px';
+			$tooltip .= '</em>';
+
+			return $tooltip;
+		}
+
+		/**
+		 * Tooltip text for the event title alignment setting.
+		 *
+		 * @return string
+		 */
+		private function get_event_title_alignment_tooltip(): string {
+			$tooltip = esc_html__( "How the event title should be aligned.", 'tribe-ext-alternative-photo-view' );
+			$tooltip .= '<br/><em>';
+			$tooltip .= esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view' );
+			$tooltip .= ' left';
+			$tooltip .= '</em>';
+
+			return $tooltip;
+		}
+
+		/**
+		 * Tooltip text for the container border radius setting.
+		 * @return string
+		 */
+		private function get_container_border_radius_tooltip(): string {
+			$tooltip = sprintf( esc_html__( 'The %1$sborder radius%2$s of the event container. This property can have from one to four values.', 'tribe-ext-alternative-photo-view' ), '<a href="https://www.w3schools.com/cssref/css3_pr_border-radius.asp" target="_blank">', '</a>' );
+			$tooltip .= ' ';
+			$tooltip .= esc_html__( "Accepts any valid CSS measurement.", 'tribe-ext-alternative-photo-view' );
+			$tooltip .= ' ';
+			$tooltip .= '<br/><em>';
+			$tooltip .= esc_html__( 'Default value:', 'tribe-ext-alternative-photo-view' );
+			$tooltip .= ' 16px';
+			$tooltip .= '</em>';
+
+			return $tooltip;
 		}
 
 	} // class
