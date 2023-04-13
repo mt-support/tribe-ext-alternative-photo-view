@@ -1,6 +1,6 @@
 === The Events Calendar Pro Extension: Alternative Photo View ===
-Contributors: ModernTribe
-Donate link: http://m.tri.be/29
+Contributors: theeventscalendar
+Donate link: https://evnt.is/29
 Tags: events, calendar
 Requires at least: 4.9.14
 Tested up to: 5.5.1
