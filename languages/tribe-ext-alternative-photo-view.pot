@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: The Events Calendar Pro Extension: Alternative Photo "
 "View\n"
-"POT-Creation-Date: 2023-04-13 15:11+0200\n"
+"POT-Creation-Date: 2023-04-17 15:49+0200\n"
 "PO-Revision-Date: 2023-04-13 15:05+0200\n"
 "Last-Translator: \n"
 "Language-Team: The Events Calendar <support@theeventscalendar.com>\n"
@@ -105,7 +105,12 @@ msgstr ""
 msgid "Loading..."
 msgstr ""
 
-#: tribe-customizations/v2/photo/event/date-time.php:42
+#: tribe-customizations/v2/photo/event/date-time.php:46
+#, php-format
+msgid "%d-day event"
+msgstr ""
+
+#: tribe-customizations/v2/photo/event/date-time.php:53
 msgid "All day"
 msgstr ""
 
