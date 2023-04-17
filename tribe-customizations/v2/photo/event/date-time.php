@@ -35,10 +35,10 @@ $time_format = tribe_get_time_format();
 			echo esc_html( $event->dates->start_display->format( $time_format ) ) . ' | ';
 		}
 		printf(
+			// Translators: The number of days the event happens on.
 			esc_html__( '%d-day event', 'tribe-ext-alternative-photo-view' ),
 			$nt->format( "%a" )
 		);
-		//echo $nt->format( "%a" ) . '-day event';
 	?>
 
 	<?php elseif ( $event->all_day ) : ?>
