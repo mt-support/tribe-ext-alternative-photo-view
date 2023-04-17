@@ -21,7 +21,14 @@
  * @version 5.1.1
  */
 
-$time_format = tribe_get_time_format();
+/**
+ * Allows changing the time format.
+ *
+ * @since 1.1.2
+ *
+ * @var string $time_format
+ */
+$time_format = apply_filters( 'tec_alternative_photo_view_time_format', tribe_get_time_format() );
 ?>
 <div class="tribe-events-pro-photo__event-datetime tribe-common-b2">
 
