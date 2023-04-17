@@ -34,7 +34,11 @@ $time_format = tribe_get_time_format();
 		if ( ! $event->all_day ) {
 			echo esc_html( $event->dates->start_display->format( $time_format ) ) . ' | ';
 		}
-		echo $nt->format( "%a" ) . '-day event';
+		printf(
+			esc_html__( '%d-day event', 'tribe-ext-alternative-photo-view' ),
+			$nt->format( "%a" )
+		);
+		//echo $nt->format( "%a" ) . '-day event';
 	?>
 
 	<?php elseif ( $event->all_day ) : ?>
