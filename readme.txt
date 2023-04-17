@@ -5,7 +5,7 @@ Tags: events, calendar
 Requires at least: 4.9.14
 Tested up to: 5.5.1
 Requires PHP: 7.0
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPL version 3 or any later version
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -30,6 +30,12 @@ Please visit our [extension library](https://theeventscalendar.com/extensions/) 
 We're always interested in your feedback and our [Help Desk](https://support.theeventscalendar.com/) are the best place to flag any issues. Do note, however, that the degree of support we provide for extensions like this one tends to be very limited.
 
 == Changelog ==
+
+= [1.1.2] 2023-04-17 =
+
+* Fix - Made the "X-day event" string translatable
+* Fix - Adjusted CSS of the date container in the tile
+* Enhancement - Added a filter for changing the time format in the tile
 
 = [1.1.1] 2023-04-13 =
 

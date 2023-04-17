@@ -21,7 +21,14 @@
  * @version 5.1.1
  */
 
-$time_format = tribe_get_time_format();
+/**
+ * Allows changing the time format.
+ *
+ * @since 1.1.2
+ *
+ * @var string $time_format
+ */
+$time_format = apply_filters( 'tec_alternative_photo_view_time_format', tribe_get_time_format() );
 ?>
 <div class="tribe-events-pro-photo__event-datetime tribe-common-b2">
 
@@ -34,7 +41,11 @@ $time_format = tribe_get_time_format();
 		if ( ! $event->all_day ) {
 			echo esc_html( $event->dates->start_display->format( $time_format ) ) . ' | ';
 		}
-		echo $nt->format( "%a" ) . '-day event';
+		printf(
+			// Translators: The number of days the event happens on.
+			esc_html__( '%d-day event', 'tribe-ext-alternative-photo-view' ),
+			$nt->format( "%a" )
+		);
 	?>
 
 	<?php elseif ( $event->all_day ) : ?>

@@ -34,7 +34,6 @@
     flex-direction: column;
 }
 .tribe-events-pro .tribe-events-pro-photo__event-date-tag {
-    width: auto;
     padding-left: 12px;
     background-color: #fff;
     padding-right: 12px;
@@ -42,6 +41,9 @@
     border-bottom-right-radius: 8px;
     border-top-left-radius: 16px;
     opacity: 0.8;
+}
+.tribe-events-pro.alternative-photo-view .tribe-events-pro-photo__event-date-tag {
+    width: auto;
 }
 .tribe-events-pro-photo .tribe-events-pro-photo__event .tribe-events-pro-photo__event-datetime {
     color: #fff;
